@@ -14,16 +14,18 @@ def print_colored_sentence(target_sent, actual_sent):
     correct = 0
     wrong = 0
 
+    wrong_found = False
     for i in range(len(target_sent)):
         if i < len(actual_sent):
             
             target_letter = target_sent[i]
             actual_letter = actual_sent[i]
 
-            if target_letter == actual_letter:
+            if target_letter == actual_letter and not wrong_found:
                 correct += 1
             else:
                 wrong += 1
+                wrong_found = True
 
     corr_str = target_sent[:correct]
     wrong_str = target_sent[correct:correct+wrong]
@@ -46,7 +48,7 @@ current_sentence = ''
 getch = _Getch()
 start_time = time.time()
 
-print('Welcome! Escape to quit. Type out the sentence below.')
+print('Welcome! Escape to quit. Type out the sentence below.\n')
 print(sentence, end='\r')
 
 while not is_game_over:
