@@ -34,12 +34,3 @@ class _GetchWindows:
         return msvcrt.getch()
 
 
-getch = _Getch()
-
-char1 = getch()
-char2 = getch()
-char3 = getch()
-
-print('I got chars {}, {} and {}'.format(char1, char2, char3))
-
-
