@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import sys
+import re
+
+from modules.commands import harty_book
+from modules.commands import harty_practice
+from modules.commands import harty_setup
+
+CONF_NAME = "htt.conf"
+sysdir = os.path.dirname(os.path.realpath(__file__))
+
+
+def parse_arguments():
+
+    def default_func(args):
+        print("Must specify tool (harshtype <tool>)"
+              "\nIf it is the first time you run Harsh Typing Trainer, it is recommended to run the 'ogi setup' command to set up a "
+              "config file and to initialize the SQLite database.")
+        parser.print_help()
+
+        # print(text_utils.ogi_main_text)
+        exit(1)
+
+    parser = argparse.ArgumentParser()
+    parser.set_defaults(func=default_func)
+
+    subparsers = parser.add_subparsers()
+
+    parse_setup(subparsers)
+    parse_practice(subparsers)
+
+    args = parser.parse_args()
+    args.func(args)
+
+
+def verify_files_setup(args):
+
+    conf_exists = ogi_config.check_config_exists()
+    conf_path = ogi_config.get_config_path()
+
+    if not conf_exists:
+        print("Config file not found in: {}".format(conf_path))
+        print("You need to set this up, either manually or by running the command './ogi setup'")
+        sys.exit(1)
+
+    expected_field_not_present = ogi_config.get_expected_field_not_present()
+
+    if len(expected_field_not_present) > 0:
+        print("Configuration file lacks following required fields")
+        for field in expected_field_not_present:
+            print("Category: {} Value: {}".format(field[0], field[1]))
+        sys.exit(1)
+
+    # -> Check config file is valid - Containing required fields
+    # -> Check that the database is set up - That the file actually exists
+
+    return False
+
+
+def parse_setup(subparsers_object):
+
+    """Setup command"""
+
+    def harty_setup_func(args):
+
+        print("in setup")
+        ogi_setup.main(args)
+
+    subparser = subparsers_object.add_parser('setup')
+    subparser.set_defaults(func=harty_setup_func, which='setup')
+
+    subparser.add_argument('--dry_run', action='store_true')
+    subparser.add_argument('--database_test', action='store_true')
+
+    # subparser.add_argument('--database_from_tsvs', action='store_true')
+    # subparser.add_argument('--time_entries')
+    # subparser.add_argument('--project_entries')
+    # subparser.add_argument('--category_entries')
+
+
+
+def parse_practice(subparsers_object):
+
+    """Subparser for new command"""
+
+    def harty_practice_func(args):
+        verify_files_setup(args)
+        harty_practice.main(args)
+
+    subparser = subparsers_object.add_parser('practice')
+    subparser.set_defaults(func=harty_practice_func, which='practice')
+
+    # subparser.add_argument('object_type', choices=['project', 'category', 'work_type'])
+    # subparser.add_argument('-n', '--name')
+    # subparser.add_argument('-c', '--category')
+    # subparser.add_argument('--dry_run', action='store_true')
+
+
+if __name__ == '__main__':
+	parse_arguments()
