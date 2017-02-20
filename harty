@@ -9,7 +9,9 @@ from modules.commands import harty_book
 from modules.commands import harty_practice
 from modules.commands import harty_setup
 
-CONF_NAME = "htt.conf"
+import harty_config
+
+CONF_NAME = "harty.conf"
 sysdir = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -17,11 +19,10 @@ def parse_arguments():
 
     def default_func(args):
         print("Must specify tool (harshtype <tool>)"
-              "\nIf it is the first time you run Harsh Typing Trainer, it is recommended to run the 'ogi setup' command to set up a "
+              "\nIf it is the first time you run Harsh Typing Trainer, it is recommended to run the 'harty setup' command to set up a "
               "config file and to initialize the SQLite database.")
         parser.print_help()
 
-        # print(text_utils.ogi_main_text)
         exit(1)
 
     parser = argparse.ArgumentParser()
@@ -38,15 +39,15 @@ def parse_arguments():
 
 def verify_files_setup(args):
 
-    conf_exists = ogi_config.check_config_exists()
-    conf_path = ogi_config.get_config_path()
+    conf_exists = harty_config.check_config_exists()
+    conf_path = harty_config.get_config_path()
 
     if not conf_exists:
         print("Config file not found in: {}".format(conf_path))
-        print("You need to set this up, either manually or by running the command './ogi setup'")
+        print("You need to set this up, either manually or by running the command './harty setup'")
         sys.exit(1)
 
-    expected_field_not_present = ogi_config.get_expected_field_not_present()
+    expected_field_not_present = harty_config.get_expected_field_not_present()
 
     if len(expected_field_not_present) > 0:
         print("Configuration file lacks following required fields")
@@ -67,7 +68,7 @@ def parse_setup(subparsers_object):
     def harty_setup_func(args):
 
         print("in setup")
-        ogi_setup.main(args)
+        harty_setup.main(args)
 
     subparser = subparsers_object.add_parser('setup')
     subparser.set_defaults(func=harty_setup_func, which='setup')

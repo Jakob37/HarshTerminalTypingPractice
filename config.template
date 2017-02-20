@@ -1,0 +1,3 @@
+[file_paths]
+sql_path=%(output_base)s/harty_data.sqlite
+output_base=/path/to/harty/data
