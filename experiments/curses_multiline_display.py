@@ -17,26 +17,61 @@
 # wrapper(main)
 
 
+# import curses
+# from curses import wrapper
+# from curses.textpad import Textbox, rectangle
+
+# def main(stdscr):
+#     stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
+
+#     editwin = curses.newwin(5,30, 2,1)
+#     rectangle(stdscr, 1,0, 1+5+1, 1+30+1)
+#     stdscr.refresh()
+
+#     box = Textbox(editwin)
+
+#     # Let the user edit until Ctrl-G is struck.
+#     box.edit()
+
+#     # Get resulting contents
+#     message = box.gather()
+
+#     print("HI")
+
+
+# wrapper(main)
+
 import curses
-from curses import wrapper
-from curses.textpad import Textbox, rectangle
+import random
+import time
+import sys
 
-def main(stdscr):
-    stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
+from getch import _Getch
 
-    editwin = curses.newwin(5,30, 2,1)
-    rectangle(stdscr, 1,0, 1+5+1, 1+30+1)
-    stdscr.refresh()
+g = _Getch()
 
-    box = Textbox(editwin)
+window = curses.initscr()
 
-    # Let the user edit until Ctrl-G is struck.
-    box.edit()
+try:
+    (h, w) = window.getmaxyx()
 
-    # Get resulting contents
-    message = box.gather()
+    print('Height: {} Width: {}'.format(window.getmaxyx()[0],window.getmaxyx()[1]))
 
-    print("HI")
+    while True:
+        x = int(random.random() * w)
+        y = int(random.random() * h)
+        window.move(y, x)
 
+        new_char = g()
 
-wrapper(main)
+        if ord(new_char) == 27:  # Escape
+            print('\nQuitting game...')
+            sys.exit(0)
+
+        window.addch(new_char)
+        window.refresh()
+        time.sleep(0.05)
+except KeyboardInterrupt:
+    pass
+finally:
+    curses.endwin()
