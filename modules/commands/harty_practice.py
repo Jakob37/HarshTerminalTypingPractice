@@ -8,6 +8,7 @@ import time
 from modules.utils.getch import _Getch
 
 def main(args):
+
     sentence = 'Hello world, and I am writing out this sentence gracefully!'
     is_game_over = False
     current_sentence = ''
@@ -16,6 +17,9 @@ def main(args):
 
     print('Welcome! Escape to quit. Type out the sentence below.\n')
     print(sentence, end='\r')
+
+    errors = 0
+    last_wrong = 0
 
     while not is_game_over:
 
@@ -29,7 +33,14 @@ def main(args):
         else:
             current_sentence += new_char
 
-        print_colored_sentence(sentence, current_sentence)
+
+        correct, wrong = get_sentence_numbers(sentence, current_sentence)
+
+        if wrong > last_wrong:
+            errors += 1
+        last_wrong = wrong
+
+        print_colored_sentence(sentence, correct, wrong)
 
         if current_sentence == sentence:
             is_game_over = True
@@ -37,10 +48,11 @@ def main(args):
 
     elapsed_time = time.time() - start_time
 
-    print('\nCongratulations, you win! It tool {:.2f} seconds'.format(elapsed_time))
+    score = elapsed_time / (1 + errors)
+    print('\nCongratulations, you win! It took {:.1f} seconds, you made {} errors resulting in score {:.1f}'.format(elapsed_time, errors, score))
 
 
-def print_colored_sentence(target_sent, actual_sent):
+def get_sentence_numbers(target_sent, actual_sent):
 
     correct = 0
     wrong = 0
@@ -57,6 +69,26 @@ def print_colored_sentence(target_sent, actual_sent):
             else:
                 wrong += 1
                 wrong_found = True
+    return (correct, wrong)
+
+
+def print_colored_sentence(target_sent, correct, wrong):
+
+    # correct = 0
+    # wrong = 0
+
+    # wrong_found = False
+    # for i in range(len(target_sent)):
+    #     if i < len(actual_sent):
+            
+    #         target_letter = target_sent[i]
+    #         actual_letter = actual_sent[i]
+
+    #         if target_letter == actual_letter and not wrong_found:
+    #             correct += 1
+    #         else:
+    #             wrong += 1
+    #             wrong_found = True
 
     corr_str = target_sent[:correct]
     wrong_str = target_sent[correct:correct+wrong]
