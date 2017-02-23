@@ -1,16 +1,34 @@
 import time
 import curses
 
-def visualize(window, write_center, x_margin, sentence, correct, wrong, errors, start_time):
+def visualize(window, write_center, x_margin, book, correct, wrong, errors, start_time, debug_string=None):
+
+    sentence = book.current_line()
+    preceeding = book.get_preceeding_lines(2)
+    following = book.get_following_lines(10)
 
     window.clear()
+
+    if debug_string is not None:
+        window.addstr(write_center - 8, x_margin, debug_string)
+
     status_sentence = get_status_string(start_time, correct, errors)
 
-    window.addstr(write_center - 2, x_margin, "statusstr", curses.color_pair(curses.COLOR_GREEN))
-    window.addstr(write_center + 2, x_margin, status_sentence)
+    window.addstr(write_center - 4, x_margin, "statusstr", curses.color_pair(curses.COLOR_GREEN))
+
+    for pre_i in range(len(preceeding)):
+        line = preceeding[pre_i]
+        window.addstr(write_center + pre_i + 1, x_margin, line, curses.color_pair(curses.COLOR_BLUE))
+
+    for i in range(len(following)):
+        line = following[i]
+        window.addstr(write_center + 4 + i, x_margin, line, curses.color_pair(curses.COLOR_BLUE))
+
+    window.addstr(write_center - 2, x_margin, status_sentence)
     write_colored_sentence(window, x_margin, write_center + 3, sentence, correct, wrong)
 
     window.refresh()
+
 
 
 def write_colored_sentence(window, x, y, target_sent, correct, wrong):

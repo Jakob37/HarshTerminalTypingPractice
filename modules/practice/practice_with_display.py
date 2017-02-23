@@ -13,12 +13,20 @@ from modules.practice.book import Book
 g = _Getch()
 
 
+DEBUG = False
+
+
+
 def run_practice_with_display():
 
-    window = curses.initscr()
-    curses.start_color()
-    curses.init_pair(curses.COLOR_GREEN, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(curses.COLOR_RED, curses.COLOR_RED, curses.COLOR_BLACK)
+    STATUS_STRING = 'Insert status message here'
+
+    if not DEBUG:
+        window = curses.initscr()
+        curses.start_color()
+        curses.init_pair(curses.COLOR_GREEN, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        curses.init_pair(curses.COLOR_RED, curses.COLOR_RED, curses.COLOR_BLACK)
+        curses.init_pair(curses.COLOR_BLUE, curses.COLOR_BLUE, curses.COLOR_BLACK)
 
     test_book = Book("books/plato_the_republic.txt")
     sentence = test_book.get_next_line()
@@ -30,9 +38,10 @@ def run_practice_with_display():
     wrong = 0
 
     try:
-        (h, w) = window.getmaxyx()
+        if not DEBUG:
+            (h, w) = window.getmaxyx()
+            write_center = int(h/2)
 
-        write_center = int(h/2)
         x_margin = 10
 
         # print('Height: {} Width: {}'.format(window.getmaxyx()[0],window.getmaxyx()[1]))
@@ -42,11 +51,19 @@ def run_practice_with_display():
         current_sentence = ''
         getch = _Getch()
 
-        vis.visualize(window, write_center, x_margin, sentence, correct, wrong, errors, start_time)
+        if not DEBUG:
+            vis.visualize(window, write_center, x_margin, test_book, correct, wrong, errors, start_time,
+                debug_string=STATUS_STRING)
+        else:
+            print(current_sentence + " " + sentence)
+            print('Length curr: {} length tot: {}'.format(len(current_sentence), len(sentence)))
+
 
         while not is_game_over:
 
             new_char = g()
+
+
 
             if ord(new_char) == 127:   # Backspace
                 current_sentence = current_sentence[:-1]
@@ -62,7 +79,7 @@ def run_practice_with_display():
                 errors += 1
             last_wrong = wrong
 
-            vis.visualize(window, write_center, x_margin, sentence, correct, wrong, errors, start_time)
+            # STATUS_STRING = 'Sentence: {} written: {}'.format(sentence, current_sentence)
 
             if current_sentence == sentence:
                 # is_game_over = True
@@ -73,11 +90,26 @@ def run_practice_with_display():
                 wrong = 0
                 current_sentence = ''
 
+            if not DEBUG:
+
+                vis.visualize(window, write_center, x_margin, test_book, correct, wrong, errors, start_time,
+                    debug_string=STATUS_STRING)
+            else:
+                # print("{0!r}".format("""skipline"""))
+                print('{!r} {!r}'.format(current_sentence, sentence))
+                print('Length curr: {} length tot: {}'.format(len(current_sentence), len(sentence)))
+
+
+            # print('sentences equal {}'.format(current_sentence == sentence))
+
+
+
 
     except KeyboardInterrupt:
         pass
     finally:
-        curses.endwin()
+        if not DEBUG:
+            curses.endwin()
 
         elapsed_seconds = time.time() - start_time
 
