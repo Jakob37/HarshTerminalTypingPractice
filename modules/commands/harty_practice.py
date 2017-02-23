@@ -13,13 +13,13 @@ def main(args):
 
     practice_with_display.run_practice_with_display()
 
-    print('Testing over!')
+    # print('Testing over!')
 
-    sys.exit(1)
+    # sys.exit(1)
 
-    elapsed_time = time.time() - start_time
-    score = elapsed_time / (1 + errors)
-    print('\nCongratulations, you win! It took {:.1f} seconds, you made {} errors resulting in score {:.1f}'.format(elapsed_time, errors, score))
+    # elapsed_time = time.time() - start_time
+    # score = elapsed_time / (1 + errors)
+    # print('\nCongratulations, you win! It took {:.1f} seconds, you made {} errors resulting in score {:.1f}'.format(elapsed_time, errors, score))
 
 
 

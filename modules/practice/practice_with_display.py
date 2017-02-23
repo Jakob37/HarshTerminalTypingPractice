@@ -6,6 +6,9 @@ import sys
 from colorama import Style, Fore, Back
 
 from modules.utils.getch import _Getch
+from modules.practice import practice_visualize_funcs as vis
+
+from modules.practice.book import Book
 
 g = _Getch()
 
@@ -17,6 +20,15 @@ def run_practice_with_display():
     curses.init_pair(curses.COLOR_GREEN, curses.COLOR_GREEN, curses.COLOR_BLACK)
     curses.init_pair(curses.COLOR_RED, curses.COLOR_RED, curses.COLOR_BLACK)
 
+    test_book = Book("books/plato_the_republic.txt")
+    sentence = test_book.get_next_line()
+
+    start_time = time.time()
+    errors = 0
+    last_wrong = 0
+    correct = 0
+    wrong = 0
+
     try:
         (h, w) = window.getmaxyx()
 
@@ -25,35 +37,24 @@ def run_practice_with_display():
 
         # print('Height: {} Width: {}'.format(window.getmaxyx()[0],window.getmaxyx()[1]))
 
-        sentence = 'Hello world, and I am writing out this sentence gracefully!'
+        # sentence = 'Hello world, and I am writing out this sentence gracefully!'
         is_game_over = False
         current_sentence = ''
         getch = _Getch()
-        start_time = time.time()
 
-        errors = 0
-        last_wrong = 0
+        vis.visualize(window, write_center, x_margin, sentence, correct, wrong, errors, start_time)
 
-
-        window.refresh()
         while not is_game_over:
-            # x = int(random.random() * w)
-            # y = int(random.random() * h)
-            # window.move(0, 0)
 
             new_char = g()
 
             if ord(new_char) == 127:   # Backspace
                 current_sentence = current_sentence[:-1]
             elif ord(new_char) == 27:  # Escape
-                print('\nQuitting game...')
-                sys.exit(0)
+                print('\nQuitting...')
+                is_game_over = True
             else:
                 current_sentence += new_char
-
-            if ord(new_char) == 27:  # Escape
-                print('\nQuitting...')
-                return
 
             correct, wrong = get_sentence_numbers(sentence, current_sentence)
 
@@ -61,41 +62,31 @@ def run_practice_with_display():
                 errors += 1
             last_wrong = wrong
 
-
-            visualize(window, write_center, x_margin, sentence, correct, wrong, errors, start_time)
+            vis.visualize(window, write_center, x_margin, sentence, correct, wrong, errors, start_time)
 
             if current_sentence == sentence:
-                is_game_over = True
+                # is_game_over = True
+                sentence = test_book.get_next_line()
+                errors = 0
+                last_wrong = 0
+                correct = 0
+                wrong = 0
+                current_sentence = ''
 
 
-            # window.addch(new_char)
-            # time.sleep(0.05)
     except KeyboardInterrupt:
         pass
     finally:
         curses.endwin()
-        print('end after')
 
-    print("outside")
+        elapsed_seconds = time.time() - start_time
 
+        words = len(sentence.split(' '))
+        wpm = words / (elapsed_seconds / 60)
 
+        score = elapsed_seconds / (1 + errors)
+        print('\nCongratulations, you win! It took {:.1f} seconds, you made {} errors, wpm: {:.2f}, score {:.1f}'.format(elapsed_seconds, errors, wpm, score))
 
-def visualize(window, write_center, x_margin, sentence, correct, wrong, errors, start_time):
-    window.clear()
-
-    # colored_sentence = get_colored_sentence(sentence, correct, wrong)
-    status_sentence = get_status_string(start_time, correct, errors)
-
-    # print('{}\n{}'.format(status_sentence, colored_sentence), end='\r')
-
-    # curses.start_color()
-
-    window.addstr(write_center - 2, x_margin, "statusstr", curses.color_pair(curses.COLOR_GREEN))
-    window.addstr(write_center + 2, x_margin, status_sentence)
-    write_colored_sentence(window, x_margin, write_center + 3, sentence, correct, wrong)
-    # window.addstr(write_center + 3, x_margin, colored_sentence)
-
-    window.refresh()
 
 
 def get_sentence_numbers(target_sent, actual_sent):
@@ -118,18 +109,3 @@ def get_sentence_numbers(target_sent, actual_sent):
     return (correct, wrong)
 
 
-def write_colored_sentence(window, x, y, target_sent, correct, wrong):
-
-    corr_str = target_sent[:correct]
-    wrong_str = target_sent[correct:correct+wrong]
-    rest = target_sent[correct+wrong:]
-
-    window.addstr(y, x, corr_str, curses.color_pair(curses.COLOR_GREEN))
-    window.addstr(y, x + len(corr_str), wrong_str, curses.color_pair(curses.COLOR_RED))
-    window.addstr(y, x + len(corr_str) + len(wrong_str), rest)
-
-
-def get_status_string(start_time, correct, wrong):
-
-    elapsed_time = time.time() - start_time
-    return '{} seconds, {} correct, {} errors'.format(int(elapsed_time), correct, wrong)
