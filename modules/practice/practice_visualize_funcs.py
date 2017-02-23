@@ -12,13 +12,13 @@ def visualize(window, write_center, x_margin, book, correct, wrong, errors, star
     if debug_string is not None:
         window.addstr(write_center - 8, x_margin, debug_string)
 
-    status_sentence = get_status_string(start_time, correct, errors)
+    status_sentence = get_status_string(start_time, correct, errors, book)
 
     window.addstr(write_center - 4, x_margin, "statusstr", curses.color_pair(curses.COLOR_GREEN))
 
     for pre_i in range(len(preceeding)):
         line = preceeding[pre_i]
-        window.addstr(write_center + pre_i + 1, x_margin, line, curses.color_pair(curses.COLOR_BLUE))
+        window.addstr(write_center + 3 - len(preceeding) + pre_i, x_margin, line, curses.color_pair(curses.COLOR_BLUE))
 
     for i in range(len(following)):
         line = following[i]
@@ -43,7 +43,10 @@ def write_colored_sentence(window, x, y, target_sent, correct, wrong):
     window.move(y, x + len(corr_str) + len(wrong_str))
 
 
-def get_status_string(start_time, correct, wrong):
+def get_status_string(start_time, correct, wrong, book):
 
     elapsed_time = time.time() - start_time
-    return '{} seconds, {} correct, {} errors'.format(int(elapsed_time), correct, wrong)
+
+    wpm = book.get_wpm(elapsed_time)
+
+    return '{} seconds, {} correct, {} errors, {:.1f} wpm'.format(int(elapsed_time), correct, wrong, wpm)

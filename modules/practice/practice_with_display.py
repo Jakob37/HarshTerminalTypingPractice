@@ -28,8 +28,9 @@ def run_practice_with_display():
         curses.init_pair(curses.COLOR_RED, curses.COLOR_RED, curses.COLOR_BLACK)
         curses.init_pair(curses.COLOR_BLUE, curses.COLOR_BLUE, curses.COLOR_BLACK)
 
-    test_book = Book("books/plato_the_republic.txt")
-    sentence = test_book.get_next_line()
+    # test_book = Book("books/plato_the_republic.txt", start_line=100)
+    test_book = Book("books/plato_the_republic.txt", rand_start=True)
+    sentence = test_book.current_line()
 
     start_time = time.time()
     errors = 0
