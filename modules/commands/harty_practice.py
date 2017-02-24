@@ -8,32 +8,26 @@ import time
 from modules.utils.getch import _Getch
 
 from modules.practice import practice_with_display
+from modules.practice.book import Book
 
 def main(args):
 
-    practice_with_display.run_practice_with_display()
-
-    # print('Testing over!')
-
-    # sys.exit(1)
-
-    # elapsed_time = time.time() - start_time
-    # score = elapsed_time / (1 + errors)
-    # print('\nCongratulations, you win! It took {:.1f} seconds, you made {} errors resulting in score {:.1f}'.format(elapsed_time, errors, score))
+    if args.practice_type == 'training':
+        run_practice(args)
+    elif args.practice_type == 'test':
+        run_test(args)
+    else:
+        print("Not implemented practice type: {}".format(args.practice_type))
+        sys.exit(1)
 
 
 
+def run_practice(args):
 
-class Status:
+    book = Book("books/plato_the_republic.txt", rand_start=True)
 
-    def __init__(self):
-        pass
+    practice_with_display.run_practice_with_display(auto_return=args.auto_return, book=book)
 
-    def get_elapsed_time(self):
-        pass
 
-    def get_score(self):
-        pass
-
-    def __str__(self):
-        pass
+def run_test(args):
+    print('run test')

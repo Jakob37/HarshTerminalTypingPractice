@@ -77,16 +77,8 @@ def parse_setup(subparsers_object):
     subparser.add_argument('--dry_run', action='store_true')
     subparser.add_argument('--database_test', action='store_true')
 
-    # subparser.add_argument('--database_from_tsvs', action='store_true')
-    # subparser.add_argument('--time_entries')
-    # subparser.add_argument('--project_entries')
-    # subparser.add_argument('--category_entries')
-
-
 
 def parse_practice(subparsers_object):
-
-    """Subparser for new command"""
 
     def harty_practice_func(args):
         verify_files_setup(args)
@@ -95,10 +87,9 @@ def parse_practice(subparsers_object):
     subparser = subparsers_object.add_parser('practice')
     subparser.set_defaults(func=harty_practice_func, which='practice')
 
-    # subparser.add_argument('object_type', choices=['project', 'category', 'work_type'])
-    # subparser.add_argument('-n', '--name')
-    # subparser.add_argument('-c', '--category')
-    # subparser.add_argument('--dry_run', action='store_true')
+    subparser.add_argument('practice_type', choices=['training', 'test'], default='training', nargs='?')
+    subparser.add_argument('--auto_return', action='store_true')
+
 
 
 if __name__ == '__main__':

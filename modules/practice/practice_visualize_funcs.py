@@ -1,7 +1,14 @@
 import time
 import curses
 
-def visualize(window, write_center, x_margin, book, correct, wrong, errors, start_time, debug_string=None):
+# def visualize(window, write_center, x_margin, book, correct, wrong, errors, start_time, debug_string=None):
+def visualize(window, write_center, x_margin, run_status, debug_string=None):
+
+    book = run_status.book
+    correct = run_status.correct
+    wrong = run_status.wrong
+    errors = run_status.errors
+    start_time = run_status.start_time
 
     sentence = book.current_line()
     preceeding = book.get_preceeding_lines(2)
