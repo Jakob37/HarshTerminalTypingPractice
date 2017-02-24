@@ -9,41 +9,33 @@ from modules.utils.getch import _Getch
 from modules.practice import practice_visualize_funcs as vis
 
 from modules.practice.book import Book
+from modules.utils import log_util
 
 g = _Getch()
-
-
-DEBUG = False
-
 
 
 def run_practice_with_display(book, auto_return=False):
 
     STATUS_STRING = 'Insert status message here'
 
-    if not DEBUG:
-        window = curses.initscr()
-        curses.start_color()
-        curses.init_pair(curses.COLOR_GREEN, curses.COLOR_GREEN, curses.COLOR_BLACK)
-        curses.init_pair(curses.COLOR_RED, curses.COLOR_RED, curses.COLOR_BLACK)
-        curses.init_pair(curses.COLOR_BLUE, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    log_util.write_to_log('test text')
+
+    window = curses.initscr()
+    curses.start_color()
+    curses.init_pair(curses.COLOR_GREEN, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(curses.COLOR_RED, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(curses.COLOR_BLUE, curses.COLOR_BLUE, curses.COLOR_BLACK)
 
     run_status = RunStatus(book)
 
     try:
-        if not DEBUG:
-            (h, w) = window.getmaxyx()
-            write_center = int(h/2)
+        (h, w) = window.getmaxyx()
+        write_center = int(h/2)
 
         x_margin = 10
         getch = _Getch()
 
-        if not DEBUG:
-            vis.visualize(window, write_center, x_margin, run_status, debug_string=STATUS_STRING)
-        else:
-            print(current_sentence + " " + sentence)
-            print('Length curr: {} length tot: {}'.format(len(current_sentence), len(sentence)))
-
+        vis.visualize(window, write_center, x_margin, run_status, debug_string=STATUS_STRING)
 
         while not run_status.is_game_over:
 
@@ -56,19 +48,13 @@ def run_practice_with_display(book, auto_return=False):
             if run_status.is_sentence_complete() and (run_status.return_struck or auto_return):
                 run_status.new_line()
 
-            if not DEBUG:
-
-                vis.visualize(window, write_center, x_margin, run_status, debug_string=STATUS_STRING)
-            else:
-                print('{!r} {!r}'.format(current_sentence, sentence))
-                print('Length curr: {} length tot: {}'.format(len(current_sentence), len(sentence)))
+            vis.visualize(window, write_center, x_margin, run_status, debug_string=STATUS_STRING)
 
 
     except KeyboardInterrupt:
         pass
     finally:
-        if not DEBUG:
-            curses.endwin()
+        curses.endwin()
 
         elapsed_seconds = time.time() - run_status.start_time
 
@@ -105,7 +91,7 @@ class RunStatus:
         self.return_struck = False
 
     def new_line(self):
-        sentence = self.book.get_next_line()
+        self.current_target = self.book.get_next_line()
         self.last_wrong = 0
         self.correct = 0
         self.wrong = 0

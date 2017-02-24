@@ -1,6 +1,8 @@
 import time
 import curses
 
+from modules.utils import log_util
+
 # def visualize(window, write_center, x_margin, book, correct, wrong, errors, start_time, debug_string=None):
 def visualize(window, write_center, x_margin, run_status, debug_string=None):
 
