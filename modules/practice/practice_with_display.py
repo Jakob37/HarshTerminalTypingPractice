@@ -28,7 +28,6 @@ def run_practice_with_display():
         curses.init_pair(curses.COLOR_RED, curses.COLOR_RED, curses.COLOR_BLACK)
         curses.init_pair(curses.COLOR_BLUE, curses.COLOR_BLUE, curses.COLOR_BLACK)
 
-    # test_book = Book("books/plato_the_republic.txt", start_line=100)
     test_book = Book("books/plato_the_republic.txt", rand_start=True)
     sentence = test_book.current_line()
 
@@ -62,16 +61,17 @@ def run_practice_with_display():
 
         while not is_game_over:
 
+            return_struck = False
             new_char = g()
-
-
 
             if ord(new_char) == 127:   # Backspace
                 current_sentence = current_sentence[:-1]
             elif ord(new_char) == 27:  # Escape
                 print('\nQuitting...')
                 is_game_over = True
-            else:
+            elif ord(new_char) == 13:
+                return_struck = True
+            elif len(current_sentence) < len(sentence):
                 current_sentence += new_char
 
             correct, wrong = get_sentence_numbers(sentence, current_sentence)
@@ -82,7 +82,7 @@ def run_practice_with_display():
 
             # STATUS_STRING = 'Sentence: {} written: {}'.format(sentence, current_sentence)
 
-            if current_sentence == sentence:
+            if current_sentence == sentence and return_struck:
                 # is_game_over = True
                 sentence = test_book.get_next_line()
                 errors = 0
@@ -104,8 +104,6 @@ def run_practice_with_display():
             # print('sentences equal {}'.format(current_sentence == sentence))
 
 
-
-
     except KeyboardInterrupt:
         pass
     finally:
@@ -118,7 +116,8 @@ def run_practice_with_display():
         wpm = words / (elapsed_seconds / 60)
 
         score = elapsed_seconds / (1 + errors)
-        print('\nCongratulations, you win! It took {:.1f} seconds, you made {} errors, wpm: {:.2f}, score {:.1f}'.format(elapsed_seconds, errors, wpm, score))
+        print('\nCongratulations, you win! It took {:.1f} seconds, you made {} errors, wpm: {:.2f}, score {:.1f}'
+            .format(elapsed_seconds, errors, test_book.wpm, score))
 
 
 
