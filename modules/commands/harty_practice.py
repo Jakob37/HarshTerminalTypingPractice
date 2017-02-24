@@ -21,13 +21,19 @@ def main(args):
         sys.exit(1)
 
 
-
 def run_practice(args):
 
     book = Book("books/plato_the_republic.txt", rand_start=True)
-
     practice_with_display.run_practice_with_display(auto_return=args.auto_return, book=book)
 
 
 def run_test(args):
-    print('run test')
+
+    time_limit = 20
+    error_limit = 10
+
+    book = Book("books/plato_the_republic.txt", rand_start=True)
+    practice_with_display.run_practice_with_display(auto_return=args.auto_return, 
+        book=book,
+        time_limit = time_limit,
+        error_limit = error_limit)

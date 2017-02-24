@@ -71,16 +71,3 @@ class Book:
 
 		return self.wpm
 
-
-
-	# def get_next_line(self):
-
-	# 	next_line = ''
-	# 	while next_line == '':
-	# 		next_line = next(self.book_fh)
-	# 		next_line = next_line.rstrip()
-
-	# 	return next_line
-
-	# def close_book(self):
-	# 	self.book_fh.close()
