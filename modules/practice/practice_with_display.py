@@ -3,7 +3,7 @@ import random
 import time
 import sys
 
-from colorama import Style, Fore, Back
+#from colorama import Style, Fore, Back
 
 from modules.utils.getch import _Getch
 from modules.practice import practice_visualize_funcs as vis
