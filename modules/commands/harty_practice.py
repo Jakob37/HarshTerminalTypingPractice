@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import colorama
-from colorama import Style, Fore, Back
+#import colorama
+#from colorama import Style, Fore, Back
 import sys
 import time
 
