@@ -18,6 +18,7 @@ sysdir = os.path.dirname(os.path.realpath(__file__))
 
 if len(sys.argv) == 1:
     harty_practice.main()
+    sys.exit(0)
 
 
 def parse_arguments():

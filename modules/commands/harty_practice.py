@@ -14,7 +14,7 @@ def main(args=None):
 
     if args is None:
         run_test()
-    if args.practice_type == 'training':
+    elif args.practice_type == 'training':
         run_practice(args)
     elif args.practice_type == 'test':
         run_test(args)
@@ -46,7 +46,7 @@ def run_test(args=None):
 
 
     book = Book("books/plato_the_republic.txt", rand_start=True)
-    practice_with_display.run_practice_with_display(auto_return=args.auto_return, 
+    practice_with_display.run_practice_with_display(auto_return=auto_return, 
         book=book,
         time_limit = time_limit,
         error_limit = error_limit)

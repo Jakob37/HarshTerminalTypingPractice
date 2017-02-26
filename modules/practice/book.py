@@ -15,7 +15,6 @@ class Book:
 			self.curr_line_nbr = start_line
 		else:
 			self.curr_line_nbr = random.randint(0, len(self.book_lines))
-			print(len(self.book_lines))
 
 		self.read_lines = 0
 		self.read_words = 0

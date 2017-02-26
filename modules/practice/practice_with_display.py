@@ -16,7 +16,7 @@ g = _Getch()
 
 def run_practice_with_display(book, auto_return=False, time_limit=None, error_limit=None):
 
-    STATUS_STRING = 'Insert status message here'
+    STATUS_STRING = 'How much can you time in {} seconds? But don\'t get sloppy - {} errors and you are done!'.format(time_limit, error_limit)
 
     log_util.write_to_log('New run started')
 
@@ -54,17 +54,17 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
         curses.endwin()
 
         if run_status.errors == 0:
-            text_prefix = 'Really well done, no errors!'
-        elif run_status.errors == 1:
-            text_prefix = 'Almost there, make it zero errors next time!'
+            text_prefix = 'Well done, no errors! Keep it up!'
         elif run_status.errors <= 3:
-            text_prefix = 'You are getting sloppy, keep track of those fingers!'
+            text_prefix = 'Almost there, make it zero errors next time!'
         elif run_status.errors <= 5:
-            text_prefix = 'Not good, be more careful while typing!'
-        elif run_status.errors < 10:
-            text_prefix = 'Terrible, start thinking before typing!!'
+            text_prefix = 'You are getting sloppy, keep track of those fingers and get the errors down to zero!'
+        elif run_status.errors <= 10:
+            text_prefix = 'You need to be more careful while typing, place those fingers correctly!'
+        elif run_status.errors <= 14:
+            text_prefix = 'Not good, start thinking before typing!!'
         else:
-            text_prefix = 'So many errors, are you even trying?'
+            text_prefix = 'Terrible! So many errors, are you even trying?'
 
         print('\n{}\nIt took {:.1f} seconds, you made {} errors, wpm: {:.2f}'
             .format(text_prefix, run_status.get_elapsed_time(), run_status.errors, run_status.get_wpm()))
