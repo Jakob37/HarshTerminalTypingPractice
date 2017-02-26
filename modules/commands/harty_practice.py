@@ -10,8 +10,10 @@ from modules.utils.getch import _Getch
 from modules.practice import practice_with_display
 from modules.practice.book import Book
 
-def main(args):
+def main(args=None):
 
+    if args is None:
+        run_test()
     if args.practice_type == 'training':
         run_practice(args)
     elif args.practice_type == 'test':
@@ -21,16 +23,27 @@ def main(args):
         sys.exit(1)
 
 
-def run_practice(args):
+def run_practice(args=None):
+
+    if args is None:
+        auto_return = False
+    else:
+        auto_return = args.auto_return
 
     book = Book("books/plato_the_republic.txt", rand_start=True)
-    practice_with_display.run_practice_with_display(auto_return=args.auto_return, book=book)
+    practice_with_display.run_practice_with_display(auto_return=auto_return, book=book)
 
 
-def run_test(args):
+def run_test(args=None):
 
-    time_limit = 20
-    error_limit = 10
+    time_limit = 60
+    error_limit = 15
+
+    if args is None:
+        auto_return = False
+    else:
+        auto_return = args.auto_return
+
 
     book = Book("books/plato_the_republic.txt", rand_start=True)
     practice_with_display.run_practice_with_display(auto_return=args.auto_return, 
