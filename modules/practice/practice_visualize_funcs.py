@@ -3,7 +3,6 @@ import curses
 
 from modules.utils import log_util
 
-# def visualize(window, write_center, x_margin, book, correct, wrong, errors, start_time, debug_string=None):
 def visualize(window, write_center, x_margin, run_status, debug_string=None):
 
     book = run_status.book
@@ -21,7 +20,7 @@ def visualize(window, write_center, x_margin, run_status, debug_string=None):
     if debug_string is not None:
         window.addstr(write_center - 8, x_margin, debug_string)
 
-    status_sentence = get_status_string(start_time, correct, errors, book)
+    status_sentence = get_status_string(run_status)
 
     window.addstr(write_center - 4, x_margin, "statusstr", curses.color_pair(curses.COLOR_GREEN))
 
@@ -52,10 +51,11 @@ def write_colored_sentence(window, x, y, target_sent, correct, wrong):
     window.move(y, x + len(corr_str) + len(wrong_str))
 
 
-def get_status_string(start_time, correct, wrong, book):
+def get_status_string(run_status):
 
-    elapsed_time = time.time() - start_time
+    elapsed_time = run_status.get_elapsed_time()
+    wpm = run_status.get_wpm()
+    correct = run_status.correct
+    errors = run_status.errors
 
-    wpm = book.get_wpm(elapsed_time)
-
-    return '{} seconds, {} correct, {} errors, {:.1f} wpm'.format(int(elapsed_time), correct, wrong, wpm)
+    return '{} seconds, {} correct, {} errors, {:.1f} wpm'.format(int(elapsed_time), correct, errors, wpm)

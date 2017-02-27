@@ -105,9 +105,6 @@ class RunStatus:
     def is_sentence_complete(self):
         return self.current_written == self.current_target
 
-    def get_wpm(self):
-        return self.book.wpm
-
     def get_elapsed_time(self):
         return time.time() - self.start_time
 
@@ -170,3 +167,14 @@ class RunStatus:
         if self.wrong > self.last_wrong:
             self.errors += 1
         self.last_wrong = self.wrong
+
+    def get_wpm(self):
+
+        prev_lines_chars = self.book.read_characters
+        curr_line_chars = self.correct
+
+        tot_chars = prev_lines_chars + curr_line_chars
+
+        chars_per_word = 5
+        wpm = (tot_chars / 5) / (self.get_elapsed_time() / 60)
+        return wpm

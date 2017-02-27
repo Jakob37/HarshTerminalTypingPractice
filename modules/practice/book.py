@@ -20,8 +20,8 @@ class Book:
 		self.read_words = 0
 		self.read_characters = 0
 
-		self.wpm_updated = True
-		self.wpm = 0
+		# self.wpm_updated = True
+		# self.wpm = 0
 
 	def load_book(self, book_fp):
 
@@ -57,16 +57,18 @@ class Book:
 			self.read_lines += 1
 			self.read_words += len(previous_line.split(' '))
 			self.read_characters += len(previous_line)
-			self.wpm_updated = False
+			# self.wpm_updated = False
 		curr_line = self.book_lines[self.curr_line_nbr - 1]
 		return curr_line
 
 
-	def get_wpm(self, elapsed_time):
+	# def get_wpm(self, elapsed_time):
 
-		if not self.wpm_updated:
-			self.wpm_updated = True
-			self.wpm = self.read_words / (elapsed_time / 60)
+	# 	# if not self.wpm_updated:
+	# 		# self.wpm_updated = True
+	# 	total_words = self.read_words + len(self.curr_line in 
 
-		return self.wpm
+	# 	self.wpm = self.read_characters / (elapsed_time / 60)
+
+	# 	return self.wpm
 
