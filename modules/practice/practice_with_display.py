@@ -138,10 +138,10 @@ class RunStatus:
         elif ord(new_char) == 27:  # Escape
             print('\nQuitting...')
             self.is_game_over = True
-        elif ord(new_char) == 13:
-            self.return_struck = True
         elif len(self.current_written) < len(self.current_target):
             self.current_written += new_char
+        elif ord(new_char) in (13, 32):
+            self.return_struck = True
 
     def update_sentence_numbers(self):
 
