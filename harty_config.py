@@ -2,9 +2,11 @@ import os
 import configparser
 import sys
 
+from modules.database import database_interface
+
 expected_conf_fields = [('file_paths', 'sql_path')]
 
-CONF_NAME = "harty.conf"
+CONF_NAME = 'harty.conf'
 
 my_dir = os.path.dirname(os.path.realpath(__file__))
 conf_path = "{}/{}".format(my_dir, CONF_NAME)
@@ -18,8 +20,13 @@ if config_exists:
 
 
 def check_config_exists():
-
     return config_exists
+
+
+def generate_default_config():
+
+    setup_config_file()
+    setup_database()
 
 
 def check_database_exists():
@@ -76,5 +83,39 @@ def get_config(force_reload=False):
     return config
 
 
-def get_base_dir():
-    return my_dir
+def setup_config_file():
+
+    initial_basedir = my_dir
+    new_config = configparser.RawConfigParser()
+
+    new_config.add_section('file_paths')
+    new_config.set('file_paths', 'sql_path', '%(output_base)s/harty_data.sqlite')
+    new_config.set('file_paths', 'output_base', initial_basedir)
+
+    new_config.add_section('settings')
+    new_config.set('settings', 'error_threshold', 15)
+    new_config.set('settings', 'time_threshold', 60)
+    new_config.set('settings', 'typer', 'default')
+
+    # conf_path = '{}/{}'.format(initial_basedir, 'harty.conf')
+
+    print("Writing config file to {}".format(conf_path))
+
+    with open(conf_path, 'w') as config_fh:
+        new_config.write(config_fh)
+
+    return new_config
+
+
+def setup_database():
+
+    """Setup SQLite database with tables used by harty at path specified by config file"""
+
+    print("Setting up database...")
+    # conf = harty_config.get_config(force_reload=True)
+
+    local_conf = get_config(force_reload=True)
+
+    database_path = local_conf.get('file_paths', 'sql_path')
+    database_interface.setup_database(database_path)
+    print("Database written to {}".format(database_path))

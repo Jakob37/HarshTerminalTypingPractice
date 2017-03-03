@@ -4,17 +4,19 @@
 import argparse
 import os
 import sys
-import re
 
-from modules.commands import harty_book
-from modules.commands import harty_practice
-from modules.commands import harty_setup
+from commands import harty_practice
 
 import harty_config
+from commands import harty_setup
 
 CONF_NAME = "harty.conf"
 sysdir = os.path.dirname(os.path.realpath(__file__))
 
+
+if not harty_config.check_config_exists():
+    print('No config file found, generating default to "harty.conf"')
+    harty_config.generate_default_config()
 
 if len(sys.argv) == 1:
     harty_practice.main()
@@ -24,8 +26,9 @@ if len(sys.argv) == 1:
 def parse_arguments():
 
     def default_func(args):
-        print("Must specify tool (harshtype <tool>)"
-              "\nIf it is the first time you run Harsh Typing Trainer, it is recommended to run the 'harty setup' command to set up a "
+        print("Must specify tool (harty <tool>)"
+              "\nIf it is the first time you run Harsh Typing Trainer, "
+              "it is recommended to run the 'harty setup' command to set up a "
               "config file and to initialize the SQLite database.")
         parser.print_help()
 
@@ -96,6 +99,5 @@ def parse_practice(subparsers_object):
     subparser.add_argument('--auto_return', action='store_true')
 
 
-
 if __name__ == '__main__':
-	parse_arguments()
+    parse_arguments()

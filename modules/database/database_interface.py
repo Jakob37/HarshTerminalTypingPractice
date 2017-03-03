@@ -1,42 +1,27 @@
 import sqlite3
 
-import ogi_config
+import harty_config
 
-# ENTRY_TABLE = 'time_entries'
-# PROJECT_TABLE = 'projects'
-# CATEGORY_TABLE = 'categories'
-# WORK_TYPE_TABLE = 'work_types'
+ENTRY_TABLE = 'type_entres'
 
-# ENTRY_FIELDS = [('date_stamp', 'TEXT'),
-#                 ('time_stamp', 'TEXT'),
-#                 ('log_type', 'TEXT'),
-#                 ('focus', 'INTEGER'),
-#                 ('duration', 'INTEGER'),
-#                 ('message', 'TEXT'),
-#                 ('project', 'TEXT'),
-#                 ('name_id', 'INTEGER PRIMARY KEY'),
-#                 ('work_type', 'TEXT')]
-# PROJECT_FIELDS = [('name', 'TEXT PRIMARY KEY'),
-#                   ('category', 'TEXT')]
-# CATEGORY_FIELDS = [('name', 'TEXT PRIMARY KEY')]
-# WORK_TYPE_FIELDS = [('name', 'TEXT PRIMARY KEY')]
+ENTRY_FIELDS = [('entry_id', 'INTEGER PRIMARY KEY'),
+                ('date_stamp', 'TEXT'),
+                ('time_stamp', 'TEXT'),
+                ('total_time_seconds', 'INTEGER'),
+                ('total_typed_characters', 'INTEGER'),
+                ('total_errors', 'INTEGER'),
+                ('type_stamp', 'TEXT')]
 
 
 def setup_database(database_path, dry_run=False):
 
+    print('Attempting to open database at: {}'.format(database_path))
+
     conn = sqlite3.connect(database_path)
     c = conn.cursor()
 
-    # create_entry_table = get_create_table_command(ENTRY_TABLE, ENTRY_FIELDS, primary_key='name_id')
-    # create_entry_table = get_create_table_command(ENTRY_TABLE, ENTRY_FIELDS)
-    # create_category_table = get_create_table_command(CATEGORY_TABLE, CATEGORY_FIELDS)
-    # create_project_table = get_create_table_command(PROJECT_TABLE, PROJECT_FIELDS)
-    # create_work_type_table = get_create_table_command(WORK_TYPE_TABLE, WORK_TYPE_FIELDS)
-
-    # c.execute(create_entry_table)
-    # c.execute(create_category_table)
-    # c.execute(create_project_table)
-    # c.execute(create_work_type_table)
+    create_entry_table = get_create_table_command(ENTRY_TABLE, ENTRY_FIELDS)
+    c.execute(create_entry_table)
 
     if not dry_run:
         conn.commit()
@@ -48,7 +33,7 @@ def setup_database(database_path, dry_run=False):
 
 def get_connection():
 
-    conf = ogi_config.get_config()
+    conf = harty_config.get_config()
     db_path = conf.get('file_paths', 'sql_path')
 
     conn = sqlite3.connect(db_path)
@@ -75,52 +60,23 @@ def get_create_table_command(table_name, field_tuples):
     database_str = 'CREATE TABLE {name} ({fields})'
 
     field_strings = ['{} {}'.format(field[0], field[1]) for field in field_tuples]
-
-    # if primary_key is not None:
-    #     field_strings.append('{} INTEGER PRIMARY KEY'.format(primary_key))
-
     field_str = ', '.join(field_strings)
 
     return database_str.format(name=table_name, fields=field_str)
-
-
-def insert_category_into_database(category_entry):
-
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    command_str = 'INSERT INTO {table_name} VALUES (?)'\
-        .format(table_name=CATEGORY_TABLE)
-
-    params = (category_entry.name,)
-
-    print(command_str)
-    print(params)
-
-    cursor.execute(command_str, params)
-    conn.commit()
-    conn.close()
-
-
-def insert_project_into_database(project_entry):
-
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    params = (project_entry.name, project_entry.category)
-
-    command_str = 'INSERT INTO {table_name} VALUES (?, ?)'\
-        .format(table_name=PROJECT_TABLE)
-
-    cursor.execute(command_str, params)
-    conn.commit()
-    conn.close()
 
 
 def insert_time_entry_into_database(time_entry, verbose=False):
 
     conn = get_connection()
     cursor = conn.cursor()
+
+# ENTRY_FIELDS = [('entry_id', 'INTEGER PRIMARY KEY'),
+#                 ('date_stamp', 'TEXT'),
+#                 ('time_stamp', 'TEXT'),
+#                 ('total_time_seconds', 'INTEGER'),
+#                 ('total_typed_characters', 'INTEGER'),
+#                 ('total_errors', 'INTEGER'),
+#                 ('type_stamp', 'TEXT')]
 
     params = (time_entry.date,
               time_entry.time,
@@ -140,55 +96,11 @@ def insert_time_entry_into_database(time_entry, verbose=False):
     conn.close()
 
 
-def insert_work_type_entry_into_database(work_type_entry):
-
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    command_str = 'INSERT INTO {table_name} VALUES (?)' \
-        .format(table_name=WORK_TYPE_TABLE)
-
-    params = (work_type_entry.name,)
-
-    cursor.execute(command_str, params)
-    conn.commit()
-    conn.close()
-
-
 def list_entries_in_table(cursor, table_name):
 
     for row in cursor.execute('SELECT * FROM {}'.format(table_name)):
         string_values = [str(val) for val in row]
         print('\t'.join(string_values))
-
-
-def get_categories_as_strings(sep="\t"):
-
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute('SELECT * FROM categories')
-    category_strings = sql_tuples_to_delimited_strings(c.fetchall(), delim=sep)
-    conn.close()
-    return category_strings
-
-
-def get_work_types_as_strings(sep="\t"):
-
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute('SELECT * FROM work_types')
-    work_type_strings = sql_tuples_to_delimited_strings(c.fetchall(), delim=sep)
-    conn.close()
-    return work_type_strings
-
-
-def get_projects_as_strings(sep="\t"):
-
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute('SELECT * FROM projects')
-    project_strings = sql_tuples_to_delimited_strings(c.fetchall(), delim=sep)
-    return project_strings
 
 
 def get_time_entries_as_strings(sep="\t"):
