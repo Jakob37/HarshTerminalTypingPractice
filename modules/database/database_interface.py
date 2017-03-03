@@ -2,7 +2,7 @@ import sqlite3
 
 import harty_config
 
-ENTRY_TABLE = 'type_entres'
+ENTRY_TABLE = 'type_entries'
 
 ENTRY_FIELDS = [('entry_id', 'INTEGER PRIMARY KEY'),
                 ('date_stamp', 'TEXT'),

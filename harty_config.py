@@ -90,6 +90,7 @@ def setup_config_file():
 
     new_config.add_section('file_paths')
     new_config.set('file_paths', 'sql_path', '%(output_base)s/harty_data.sqlite')
+    new_config.set('file_paths', 'book_base', '%(output_base)s/books')
     new_config.set('file_paths', 'output_base', initial_basedir)
 
     new_config.add_section('settings')

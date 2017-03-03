@@ -3,6 +3,7 @@ import curses
 
 from modules.utils import log_util
 
+
 def visualize(window, write_center, x_margin, run_status, debug_string=None):
 
     book = run_status.book
@@ -36,7 +37,6 @@ def visualize(window, write_center, x_margin, run_status, debug_string=None):
     write_colored_sentence(window, x_margin, write_center + 3, sentence, correct, wrong)
 
     window.refresh()
-
 
 
 def write_colored_sentence(window, x, y, target_sent, correct, wrong):

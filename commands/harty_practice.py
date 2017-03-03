@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
-#import colorama
-#from colorama import Style, Fore, Back
 import sys
 import time
 
-from modules.utils.getch import _Getch
+import harty_config
 
 from modules.practice import practice_with_display
 from modules.practice.book import Book
+
 
 def main(args=None):
 
@@ -30,7 +29,8 @@ def run_practice(args=None):
     else:
         auto_return = args.auto_return
 
-    book = Book("books/plato_the_republic.txt", rand_start=True)
+    book_path = get_book_path('plato_the_republic.txt')
+    book = Book(book_path, rand_start=True)
     practice_with_display.run_practice_with_display(auto_return=auto_return, book=book)
 
 
@@ -44,9 +44,16 @@ def run_test(args=None):
     else:
         auto_return = args.auto_return
 
-
-    book = Book("books/plato_the_republic.txt", rand_start=True)
+    book_path = get_book_path('plato_the_republic.txt')
+    book = Book(book_path, rand_start=True)
     practice_with_display.run_practice_with_display(auto_return=auto_return, 
-        book=book,
-        time_limit = time_limit,
-        error_limit = error_limit)
+                                                    book=book,
+                                                    time_limit = time_limit,
+                                                    error_limit = error_limit)
+
+
+def get_book_path(book_file_name):
+
+    conf = harty_config.get_config()
+    book_base = conf.get('file_paths', 'book_base')
+    return '{}/{}'.format(book_base, book_file_name)
