@@ -37,15 +37,16 @@ def run_practice(args=None):
 
 def run_test(args=None):
 
-    time_limit = 60
-    error_limit = 15
-
     if args is None:
         auto_return = False
+        description = 'default test'
     else:
         auto_return = args.auto_return
+        description = args.description
 
-    description = 'default text'
+    conf = harty_config.get_config()
+    time_limit = conf.getint('settings', 'time_threshold')
+    error_limit = conf.getint('settings', 'error_threshold')
 
     book_path = get_book_path('plato_the_republic.txt')
     book = Book(book_path, rand_start=True)

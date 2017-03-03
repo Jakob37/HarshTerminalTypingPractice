@@ -15,7 +15,13 @@ MIN_HEIGHT = 20
 
 def run_practice_with_display(book, auto_return=False, time_limit=None, error_limit=None, descr=""):
 
-    STATUS_STRING = 'How much can you time in {} seconds? But don\'t get sloppy - {} errors and you are done!'.format(time_limit, error_limit)
+    starting_line_nbr = book.get_line_number()
+
+    STATUS_STRING = 'How much can you time in {} seconds? But don\'t get sloppy - {} errors and you are done!\n' \
+                    '\t  Reading from the book "{}", starting at line: {}'.format(time_limit,
+                                                                            error_limit,
+                                                                            book.get_book_name(),
+                                                                            starting_line_nbr)
 
     # log_util.write_to_log('New run started')
 
@@ -31,7 +37,6 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
             sys.exit(1)
 
         x_margin = 10
-        # getch = _Getch()
 
         vis.visualize(window, write_center, x_margin, run_status, debug_string=STATUS_STRING)
 
@@ -57,7 +62,10 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
     finally:
         curses.endwin()
 
-        if run_status.errors == 0:
+        if run_status.errors > run_status.correct:
+            text_prefix = 'More errors than correct? Pull yourself together, ' \
+                          'and make sure that CapsLock isn\'t enabled'
+        elif run_status.errors == 0:
             text_prefix = 'Well done, no errors! Keep it up!'
         elif run_status.errors <= 3:
             text_prefix = 'Almost there, make it zero errors next time!'
@@ -70,12 +78,15 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
         else:
             text_prefix = 'Terrible! So many errors, are you even trying?'
 
-        print('\n{}\nIt took {:.1f} seconds, you made {} errors, wpm: {:.2f}'
-              .format(text_prefix, run_status.get_elapsed_time(), run_status.errors, run_status.get_wpm()))
-
-        database_interface.write_run_entry(run_status)
-        print('Entry written to database')
-
+        if not run_status.is_aborted:
+            print('\n{}\nIt took {:.1f} seconds, you made {} errors, wpm: {:.2f}'
+                  .format(text_prefix, run_status.get_elapsed_time(), run_status.errors, run_status.get_wpm()))
+            database_interface.write_run_entry(run_status)
+            print('Entry written to database')
+        else:
+            print('User aborted after {:.1f} seconds, errors: {} wpm {:.2f}'.format(run_status.get_elapsed_time(),
+                                                                                    run_status.errors,
+                                                                                    run_status.get_wpm()))
 
 def initialize_curses_window():
 

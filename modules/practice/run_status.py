@@ -15,6 +15,7 @@ class RunStatus:
         self.current_target = self.book.current_line()
         self.current_written = ''
         self.is_game_over = False
+        self.is_aborted = False
         self.return_struck = False
         self.description = descr
 
@@ -68,6 +69,7 @@ class RunStatus:
         elif ord(new_char) == 27:  # Escape
             print('\nQuitting...')
             self.is_game_over = True
+            self.is_aborted = True
         elif len(self.current_written) < len(self.current_target):
             self.current_written += new_char
         elif ord(new_char) in (13, 32):

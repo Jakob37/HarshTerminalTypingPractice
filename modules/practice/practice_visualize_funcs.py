@@ -14,7 +14,7 @@ def visualize(window, write_center, x_margin, run_status, debug_string=None):
 
     sentence = book.current_line()
     preceeding = book.get_preceeding_lines(2)
-    following = book.get_following_lines(10)
+    following = book.get_following_lines(6)
 
     window.clear()
 
@@ -42,7 +42,7 @@ def visualize(window, write_center, x_margin, run_status, debug_string=None):
 def write_colored_sentence(window, x, y, target_sent, correct, wrong):
 
     corr_str = target_sent[:correct]
-    wrong_str = target_sent[correct:correct+wrong]
+    wrong_str = target_sent[correct:correct+wrong].replace(' ', '_')
     rest = target_sent[correct+wrong:]
 
     window.addstr(y, x, corr_str, curses.color_pair(curses.COLOR_GREEN))
