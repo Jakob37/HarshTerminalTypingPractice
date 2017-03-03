@@ -3,7 +3,7 @@ import time
 
 class RunStatus:
 
-    def __init__(self, book, time_limit=None, error_limit=None):
+    def __init__(self, book, time_limit=None, error_limit=None, descr=None):
 
         self.book = book
 
@@ -16,9 +16,21 @@ class RunStatus:
         self.current_written = ''
         self.is_game_over = False
         self.return_struck = False
+        self.description = descr
 
         self.time_limit = time_limit
         self.error_limit = error_limit
+
+    def is_completed(self, as_digit=False):
+        is_completed_bool = self.errors < self.error_limit \
+                                and self.get_elapsed_time() > self.time_limit
+        if as_digit:
+            return is_completed_bool
+        else:
+            if is_completed_bool:
+                return 1
+            else:
+                return 0
 
     def limited_run(self):
         return self.time_limit is not None or self.error_limit is not None
@@ -99,3 +111,13 @@ class RunStatus:
         chars_per_word = 5
         wpm = (tot_chars / chars_per_word) / (self.get_elapsed_time() / 60)
         return wpm
+
+    def __str__(self):
+
+        return '{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(self.correct,
+                                                   self.wrong,
+                                                   self.start_time,
+                                                   self.time_limit,
+                                                   self.errors,
+                                                   self.error_limit,
+                                                   self.is_game_over)

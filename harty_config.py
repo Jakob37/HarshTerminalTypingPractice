@@ -104,8 +104,7 @@ def setup_config_file():
 
     with open(conf_path, 'w') as config_fh:
         new_config.write(config_fh)
-
-    return new_config
+        print('Config written!')
 
 
 def setup_database():

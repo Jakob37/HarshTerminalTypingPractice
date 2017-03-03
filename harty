@@ -16,7 +16,14 @@ sysdir = os.path.dirname(os.path.realpath(__file__))
 
 if not harty_config.check_config_exists():
     print('No config file found, generating default to "harty.conf"')
+    print('Generating SQLite database to "harty_data.sqlite"')
+    print('You can update settings later by editing the configuration file')
+    print('To reset the configuration file, delete the current and a new will be generated')
+
+    print('')
+    print('You can now run harty by running it again')
     harty_config.generate_default_config()
+    sys.exit(0)
 
 if len(sys.argv) == 1:
     harty_practice.main()
@@ -97,6 +104,7 @@ def parse_practice(subparsers_object):
 
     subparser.add_argument('practice_type', choices=['training', 'test'], default='training', nargs='?')
     subparser.add_argument('--auto_return', action='store_true')
+    subparser.add_argument('--description', help='Extra information about the run', default='no description')
 
 
 if __name__ == '__main__':

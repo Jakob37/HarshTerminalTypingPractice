@@ -29,9 +29,10 @@ def run_practice(args=None):
     else:
         auto_return = args.auto_return
 
+    description = args.description
     book_path = get_book_path('plato_the_republic.txt')
     book = Book(book_path, rand_start=True)
-    practice_with_display.run_practice_with_display(auto_return=auto_return, book=book)
+    practice_with_display.run_practice_with_display(auto_return=auto_return, book=book, descr=description)
 
 
 def run_test(args=None):
@@ -44,12 +45,15 @@ def run_test(args=None):
     else:
         auto_return = args.auto_return
 
+    description = 'default text'
+
     book_path = get_book_path('plato_the_republic.txt')
     book = Book(book_path, rand_start=True)
     practice_with_display.run_practice_with_display(auto_return=auto_return, 
                                                     book=book,
-                                                    time_limit = time_limit,
-                                                    error_limit = error_limit)
+                                                    time_limit=time_limit,
+                                                    error_limit=error_limit,
+                                                    descr=description)
 
 
 def get_book_path(book_file_name):

@@ -1,14 +1,11 @@
 import curses
-import random
-import time
 import sys
 
 from modules.utils.getch import _Getch
 from modules.practice import practice_visualize_funcs as vis
 
-from modules.practice.book import Book
-from modules.utils import log_util
 from modules.practice.run_status import RunStatus
+from modules.database import database_interface
 
 g = _Getch()
 
@@ -16,14 +13,14 @@ g = _Getch()
 MIN_HEIGHT = 20
 
 
-def run_practice_with_display(book, auto_return=False, time_limit=None, error_limit=None):
+def run_practice_with_display(book, auto_return=False, time_limit=None, error_limit=None, descr=""):
 
     STATUS_STRING = 'How much can you time in {} seconds? But don\'t get sloppy - {} errors and you are done!'.format(time_limit, error_limit)
 
     # log_util.write_to_log('New run started')
 
     window = initialize_curses_window()
-    run_status = RunStatus(book, time_limit=time_limit, error_limit=error_limit)
+    run_status = RunStatus(book, time_limit=time_limit, error_limit=error_limit, descr=descr)
 
     try:
         (h, w) = window.getmaxyx()
@@ -51,8 +48,6 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
 
             vis.visualize(window, write_center, x_margin, run_status, debug_string=STATUS_STRING)
 
-            # print('hi')
-
             if run_status.limited_run():
                 # print('check limited')
                 run_status.check_limits()
@@ -76,7 +71,10 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
             text_prefix = 'Terrible! So many errors, are you even trying?'
 
         print('\n{}\nIt took {:.1f} seconds, you made {} errors, wpm: {:.2f}'
-            .format(text_prefix, run_status.get_elapsed_time(), run_status.errors, run_status.get_wpm()))
+              .format(text_prefix, run_status.get_elapsed_time(), run_status.errors, run_status.get_wpm()))
+
+        database_interface.write_run_entry(run_status)
+        print('Entry written to database')
 
 
 def initialize_curses_window():

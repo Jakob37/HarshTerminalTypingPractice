@@ -2,15 +2,21 @@ import sqlite3
 
 import harty_config
 
+from modules.utils import date_utils
+
 ENTRY_TABLE = 'type_entries'
 
 ENTRY_FIELDS = [('entry_id', 'INTEGER PRIMARY KEY'),
                 ('date_stamp', 'TEXT'),
                 ('time_stamp', 'TEXT'),
+                ('typed_characters', 'INTEGER'),
+                ('wpm', 'NUMERIC'),
+                ('completed', 'BIT'),
                 ('total_time_seconds', 'INTEGER'),
                 ('total_typed_characters', 'INTEGER'),
                 ('total_errors', 'INTEGER'),
-                ('type_stamp', 'TEXT')]
+                ('type_stamp', 'TEXT'),
+                ('description', 'TEXT')]
 
 
 def setup_database(database_path, dry_run=False):
@@ -65,7 +71,7 @@ def get_create_table_command(table_name, field_tuples):
     return database_str.format(name=table_name, fields=field_str)
 
 
-def insert_time_entry_into_database(time_entry, verbose=False):
+def write_run_entry(run_entry, verbose=False):
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -78,15 +84,20 @@ def insert_time_entry_into_database(time_entry, verbose=False):
 #                 ('total_errors', 'INTEGER'),
 #                 ('type_stamp', 'TEXT')]
 
-    params = (time_entry.date,
-              time_entry.time,
-              time_entry.log_type,
-              time_entry.focus,
-              time_entry.duration,
-              time_entry.message,
-              time_entry.project,
-              time_entry.work_type,)
-    command_str = 'INSERT INTO {table_name} VALUES (?, ?, ?, ?, ?, ?, ?, NULL, ?)'.format(table_name=ENTRY_TABLE)
+    current_date = date_utils.get_current_date_string()
+    current_time = date_utils.get_current_time_string()
+
+    params = (current_date,
+              current_time,
+              run_entry.correct,
+              run_entry.get_wpm(),
+              run_entry.time_limit,
+              run_entry.is_completed(as_digit=True),
+              run_entry.correct,
+              run_entry.errors,
+              '[placeholder]',
+              run_entry.description)
+    command_str = 'INSERT INTO {table_name} VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'.format(table_name=ENTRY_TABLE)
 
     if verbose:
         print("Command to be executed: '{}'".format(command_str))
