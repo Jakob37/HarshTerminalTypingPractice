@@ -4,7 +4,7 @@ import curses
 from modules.utils import log_util
 
 
-def visualize(window, write_center, x_margin, run_status, debug_string=None):
+def visualize(window, write_center, x_margin, run_status, debug_string=None, quiet=True):
 
     book = run_status.book
     correct = run_status.correct
@@ -13,17 +13,19 @@ def visualize(window, write_center, x_margin, run_status, debug_string=None):
     start_time = run_status.start_time
 
     sentence = book.current_line()
-    preceeding = book.get_preceeding_lines(2)
-    following = book.get_following_lines(6)
+    preceeding = book.get_preceeding_lines(4)
+    following = book.get_following_lines(8)
 
     window.clear()
 
-    if debug_string is not None:
-        window.addstr(write_center - 8, x_margin, debug_string)
+    if quiet:
+        status_sentence = ""
+    else:
+        status_sentence = get_status_string(run_status)
+        window.addstr(write_center - 4, x_margin, "statusstr", curses.color_pair(curses.COLOR_GREEN))
+        if debug_string is not None:
+            window.addstr(write_center - 8, x_margin, debug_string)
 
-    status_sentence = get_status_string(run_status)
-
-    window.addstr(write_center - 4, x_margin, "statusstr", curses.color_pair(curses.COLOR_GREEN))
 
     for pre_i in range(len(preceeding)):
         line = preceeding[pre_i]
