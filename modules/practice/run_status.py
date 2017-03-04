@@ -11,6 +11,8 @@ class RunStatus:
         self.errors = 0
         self.last_wrong = 0
         self.correct = 0
+        self.prev_correct = 0
+
         self.wrong = 0
         self.current_target = self.book.current_line()
         self.current_written = ''
@@ -21,6 +23,9 @@ class RunStatus:
 
         self.time_limit = time_limit
         self.error_limit = error_limit
+
+    def get_total_correct(self):
+        return self.correct + self.prev_correct
 
     def is_completed(self, as_digit=False):
         is_completed_bool = self.errors < self.error_limit \
@@ -58,6 +63,7 @@ class RunStatus:
     def new_line(self):
         self.current_target = self.book.get_next_line()
         self.last_wrong = 0
+        self.prev_correct += self.correct
         self.correct = 0
         self.wrong = 0
         self.current_written = ''
@@ -116,7 +122,7 @@ class RunStatus:
 
     def __str__(self):
 
-        return '{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(self.correct,
+        return '{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(self.get_total_correct(),
                                                    self.wrong,
                                                    self.start_time,
                                                    self.time_limit,

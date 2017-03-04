@@ -89,7 +89,7 @@ def write_run_entry(run_entry, verbose=False):
 
     params = (current_date,
               current_time,
-              run_entry.correct,
+              run_entry.get_total_correct(),
               run_entry.get_wpm(),
               run_entry.time_limit,
               run_entry.is_completed(as_digit=True),

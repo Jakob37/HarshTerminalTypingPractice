@@ -62,7 +62,7 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
     finally:
         curses.endwin()
 
-        if run_status.errors > run_status.correct:
+        if run_status.errors > run_status.get_total_correct():
             text_prefix = 'More errors than correct? Pull yourself together, ' \
                           'and make sure that CapsLock isn\'t enabled'
         elif run_status.errors == 0:
@@ -79,14 +79,16 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
             text_prefix = 'Terrible! So many errors, are you even trying?'
 
         if not run_status.is_aborted:
-            print('\n{}\nIt took {:.1f} seconds, you made {} errors, wpm: {:.2f}'
-                  .format(text_prefix, run_status.get_elapsed_time(), run_status.errors, run_status.get_wpm()))
+            print('\n{}\nIt took {:.1f} seconds, you made {} errors, {} correct, wpm: {:.2f}'
+                  .format(text_prefix, run_status.get_elapsed_time(), run_status.errors,
+                          run_status.get_total_correct(), run_status.get_wpm()))
             database_interface.write_run_entry(run_status)
             print('Entry written to database')
         else:
             print('User aborted after {:.1f} seconds, errors: {} wpm {:.2f}'.format(run_status.get_elapsed_time(),
                                                                                     run_status.errors,
                                                                                     run_status.get_wpm()))
+
 
 def initialize_curses_window():
 

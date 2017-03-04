@@ -55,7 +55,7 @@ def get_status_string(run_status):
 
     elapsed_time = run_status.get_elapsed_time()
     wpm = run_status.get_wpm()
-    correct = run_status.correct
+    correct = run_status.get_total_correct()
     errors = run_status.errors
 
     return '{} seconds, {} correct, {} errors, {:.1f} wpm'.format(int(elapsed_time), correct, errors, wpm)
