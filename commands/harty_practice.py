@@ -8,6 +8,8 @@ import harty_config
 from modules.practice import practice_with_display
 from modules.practice.book import Book
 
+REPUBLIC_BOOK = 'plato_the_republic.txt'
+
 
 def main(args=None):
 
@@ -22,6 +24,20 @@ def main(args=None):
         sys.exit(1)
 
 
+def test_main(args):
+
+    auto_return = False
+    time_limit = 60
+    error_limit = 5
+    book_path = get_book_path(REPUBLIC_BOOK)
+    book = Book(book_path, rand_start=True)
+    practice_with_display.run_practice_with_display(auto_return=auto_return,
+                                                    book=book,
+                                                    is_eval_run=True,
+                                                    time_limit=time_limit,
+                                                    error_limit=error_limit)
+
+
 def run_practice(args=None):
 
     if args is None:
@@ -30,7 +46,7 @@ def run_practice(args=None):
         auto_return = args.auto_return
 
     description = args.description
-    book_path = get_book_path('plato_the_republic.txt')
+    book_path = get_book_path(REPUBLIC_BOOK)
     book = Book(book_path, rand_start=True)
     practice_with_display.run_practice_with_display(auto_return=auto_return, book=book, descr=description)
 
@@ -48,7 +64,7 @@ def run_test(args=None):
     time_limit = conf.getint('settings', 'time_threshold')
     error_limit = conf.getint('settings', 'error_threshold')
 
-    book_path = get_book_path('plato_the_republic.txt')
+    book_path = get_book_path(REPUBLIC_BOOK)
     book = Book(book_path, rand_start=True)
     practice_with_display.run_practice_with_display(auto_return=auto_return, 
                                                     book=book,

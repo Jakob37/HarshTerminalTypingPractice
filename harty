@@ -48,6 +48,7 @@ def parse_arguments():
 
     parse_setup(subparsers)
     parse_practice(subparsers)
+    parse_test(subparsers)
 
     args = parser.parse_args()
     args.func(args)
@@ -105,6 +106,16 @@ def parse_practice(subparsers_object):
     subparser.add_argument('practice_type', choices=['training', 'test'], default='training', nargs='?')
     subparser.add_argument('--auto_return', action='store_true')
     subparser.add_argument('--description', help='Extra information about the run', default='no description')
+
+
+def parse_test(subparsers_object):
+
+    def harty_test_func(args):
+        verify_files_setup(args)
+        harty_practice.test_main(args)
+
+    subparser = subparsers_object.add_parser('test')
+    subparser.set_defaults(func=harty_test_func, which='test')
 
 
 if __name__ == '__main__':

@@ -76,26 +76,37 @@ def write_run_entry(run_entry, verbose=False):
     conn = get_connection()
     cursor = conn.cursor()
 
+    current_date = date_utils.get_current_date_string()
+    current_time = date_utils.get_current_time_string()
+
+    if run_entry.is_eval_run:
+        type_stamp_text = 'EVAL'
+    else:
+        type_stamp_text = 'unspecified'
+
+    print('Is completed: {}'.format(run_entry.is_completed(as_digit=True)))
+
 # ENTRY_FIELDS = [('entry_id', 'INTEGER PRIMARY KEY'),
 #                 ('date_stamp', 'TEXT'),
 #                 ('time_stamp', 'TEXT'),
+#                 ('typed_characters', 'INTEGER'),
+#                 ('wpm', 'NUMERIC'),
+#                 ('completed', 'BIT'),
 #                 ('total_time_seconds', 'INTEGER'),
 #                 ('total_typed_characters', 'INTEGER'),
 #                 ('total_errors', 'INTEGER'),
-#                 ('type_stamp', 'TEXT')]
-
-    current_date = date_utils.get_current_date_string()
-    current_time = date_utils.get_current_time_string()
+#                 ('type_stamp', 'TEXT'),
+#                 ('description', 'TEXT')]
 
     params = (current_date,
               current_time,
               run_entry.get_total_correct(),
               run_entry.get_wpm(),
-              run_entry.time_limit,
               run_entry.is_completed(as_digit=True),
-              run_entry.correct,
+              run_entry.time_limit,
+              run_entry.get_total_correct(),
               run_entry.errors,
-              '[placeholder]',
+              type_stamp_text,
               run_entry.description)
     command_str = 'INSERT INTO {table_name} VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'.format(table_name=ENTRY_TABLE)
 
@@ -153,3 +164,17 @@ def delete_last_time_entry():
     c.execute('DELETE FROM time_entries WHERE name_id = (SELECT MAX(name_id) FROM time_entries)')
     conn.commit()
     conn.close()
+
+
+def check_successful_test_today():
+
+    today_stamp = date_utils.get_current_date_string()
+
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT * FROM type_entries WHERE date_stamp="{date_stamp}" AND type_stamp="EVAL" AND completed=1'.format(today_stamp))
+    tups = list()
+    for tup in c:
+        tups.append(tup)
+    conn.close()
+    return len(tups) > 0

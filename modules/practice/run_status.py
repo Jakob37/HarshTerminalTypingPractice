@@ -3,7 +3,7 @@ import time
 
 class RunStatus:
 
-    def __init__(self, book, time_limit=None, error_limit=None, descr=None):
+    def __init__(self, book, time_limit=None, error_limit=None, descr=None, is_eval_run=False):
 
         self.book = book
 
@@ -20,6 +20,7 @@ class RunStatus:
         self.is_aborted = False
         self.return_struck = False
         self.description = descr
+        self.is_eval_run = is_eval_run
 
         self.time_limit = time_limit
         self.error_limit = error_limit
@@ -30,7 +31,7 @@ class RunStatus:
     def is_completed(self, as_digit=False):
         is_completed_bool = self.errors < self.error_limit \
                                 and self.get_elapsed_time() > self.time_limit
-        if as_digit:
+        if not as_digit:
             return is_completed_bool
         else:
             if is_completed_bool:

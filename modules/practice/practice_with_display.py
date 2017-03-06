@@ -13,7 +13,7 @@ g = _Getch()
 MIN_HEIGHT = 20
 
 
-def run_practice_with_display(book, auto_return=False, time_limit=None, error_limit=None, descr=""):
+def run_practice_with_display(book, auto_return=False, time_limit=None, error_limit=None, descr="", is_eval_run=False):
 
     starting_line_nbr = book.get_line_number()
 
@@ -26,7 +26,7 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
     # log_util.write_to_log('New run started')
 
     window = initialize_curses_window()
-    run_status = RunStatus(book, time_limit=time_limit, error_limit=error_limit, descr=descr)
+    run_status = RunStatus(book, time_limit=time_limit, error_limit=error_limit, descr=descr, is_eval_run=is_eval_run)
 
     try:
         (h, w) = window.getmaxyx()
