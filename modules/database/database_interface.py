@@ -172,7 +172,8 @@ def check_successful_test_today():
 
     conn = get_connection()
     c = conn.cursor()
-    c.execute('SELECT * FROM type_entries WHERE date_stamp="{date_stamp}" AND type_stamp="EVAL" AND completed=1'.format(today_stamp))
+    c.execute('SELECT * FROM type_entries WHERE date_stamp="{date_stamp}" AND type_stamp="EVAL" AND completed=1'
+              .format(date_stamp=today_stamp))
     tups = list()
     for tup in c:
         tups.append(tup)
