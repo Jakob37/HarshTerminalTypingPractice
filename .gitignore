@@ -1,5 +1,6 @@
 # Directories
 .idea/
+parse_test/
 
 # Files
 *.swp
