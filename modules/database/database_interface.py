@@ -3,6 +3,7 @@ import sqlite3
 import harty_config
 
 from modules.utils import date_utils
+from modules.practice.run_status import RunStatus
 
 ENTRY_TABLE = 'type_entries'
 
@@ -125,14 +126,19 @@ def list_entries_in_table(cursor, table_name):
         print('\t'.join(string_values))
 
 
-def get_time_entries_as_strings(sep="\t"):
+def get_run_entry_dicts(sep='\t'):
 
     conn = get_connection()
     c = conn.cursor()
-    c.execute('SELECT * FROM time_entries')
+    c.execute('SELECT * FROM type_entries')
     time_entry_strings = sql_tuples_to_delimited_strings(c.fetchall(), delim=sep)
     conn.close()
-    return time_entry_strings
+
+    run_status_entries = list()
+    for entry_string in time_entry_strings:
+        run_status_entries.append(RunStatus.entry_dict_from_string(entry_string))
+
+    return run_status_entries
 
 
 def sql_tuples_to_delimited_strings(sql_tuples, delim="\t"):
@@ -179,3 +185,4 @@ def check_successful_test_today():
         tups.append(tup)
     conn.close()
     return len(tups) > 0
+

@@ -10,6 +10,7 @@ from commands import harty_practice
 import harty_config
 from commands import harty_setup
 from commands import harty_status
+from commands import harty_list
 
 CONF_NAME = "harty.conf"
 sysdir = os.path.dirname(os.path.realpath(__file__))
@@ -51,6 +52,7 @@ def parse_arguments():
     parse_practice(subparsers)
     parse_test(subparsers)
     parse_status(subparsers)
+    parse_list(subparsers)
 
     args = parser.parse_args()
     args.func(args)
@@ -130,6 +132,16 @@ def parse_status(subparsers_object):
     subparser.set_defaults(func=harty_status_func, which='status')
 
     subparser.add_argument('--terminal', help='Information adjusted for terminal integration', action='store_true')
+
+
+def parse_list(subparsers_object):
+
+    def harty_list_func(args):
+        verify_files_setup(args)
+        harty_list.main(args)
+
+    subparser = subparsers_object.add_parser('list')
+    subparser.set_defaults(func=harty_list_func, which='list')
 
 
 if __name__ == '__main__':

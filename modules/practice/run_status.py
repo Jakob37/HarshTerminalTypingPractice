@@ -25,6 +25,24 @@ class RunStatus:
         self.time_limit = time_limit
         self.error_limit = error_limit
 
+    @staticmethod
+    def entry_dict_from_string(entry_string, delim='\t'):
+
+        entry_dict = dict()
+        fields = entry_string.split(delim)
+        entry_dict['entry_id'] = fields[0]
+        entry_dict['date_stamp'] = fields[1]
+        entry_dict['time_stamp'] = fields[2]
+        entry_dict['typed_characters'] = int(fields[3])
+        entry_dict['wpm'] = float(fields[4])
+        entry_dict['completed'] = fields[5]
+        entry_dict['total_time_seconds'] = float(fields[6])
+        entry_dict['total_typed_characters'] = int(fields[7])
+        entry_dict['total_errors'] = int(fields[8])
+        entry_dict['type_stamp'] = fields[9]
+        entry_dict['description'] = fields[10]
+        return entry_dict
+
     def get_total_correct(self):
         return self.correct + self.prev_correct
 
