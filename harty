@@ -142,6 +142,7 @@ def parse_list(subparsers_object):
 
     subparser = subparsers_object.add_parser('list')
     subparser.set_defaults(func=harty_list_func, which='list')
+    subparser.add_argument('--highscore', action='store_true')
 
 
 if __name__ == '__main__':

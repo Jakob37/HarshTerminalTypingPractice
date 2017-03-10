@@ -53,12 +53,12 @@ def run_practice(args=None):
 
 def run_test(args=None):
 
-    if args is None:
-        auto_return = False
-        description = 'default test'
-    else:
-        auto_return = args.auto_return
-        description = args.description
+    # if args is None:
+    #     auto_return = False
+    #     description = 'default test'
+    # else:
+    #     auto_return = args.auto_return
+    #     description = args.description
 
     conf = harty_config.get_config()
     time_limit = conf.getint('settings', 'time_threshold')
@@ -66,8 +66,8 @@ def run_test(args=None):
 
     book_path = get_book_path(REPUBLIC_BOOK)
     book = Book(book_path, rand_start=True)
-    practice_with_display.run_practice_with_display(auto_return=auto_return, 
-                                                    book=book,
+    description = 'TEST_EVAL'
+    practice_with_display.run_practice_with_display(book=book,
                                                     time_limit=time_limit,
                                                     error_limit=error_limit,
                                                     descr=description)

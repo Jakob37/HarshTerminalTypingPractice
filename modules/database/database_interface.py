@@ -82,6 +82,8 @@ def write_run_entry(run_entry, verbose=False):
 
     if run_entry.is_eval_run:
         type_stamp_text = 'EVAL'
+    elif run_entry.description == 'TEST_EVAL':
+        type_stamp_text = 'TEST_EVAL'
     else:
         type_stamp_text = 'unspecified'
 
@@ -185,4 +187,24 @@ def check_successful_test_today():
         tups.append(tup)
     conn.close()
     return len(tups) > 0
+
+
+def get_today_test_eval_runs():
+
+    today_stamp = date_utils.get_current_date_string()
+
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT * FROM type_entries WHERE date_stamp="{date_stamp}" AND type_stamp="TEST_EVAL" AND completed=1'
+              .format(date_stamp=today_stamp))
+    tups = list()
+    for tup in c:
+        tups.append(tup)
+    conn.close()
+    return tups
+
+
+
+
+
 
