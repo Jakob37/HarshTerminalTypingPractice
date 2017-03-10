@@ -16,16 +16,15 @@ def show_highscore(args):
     best_run = today_runs[0]
     for run in today_runs[1:]:
 
-        wpm = run[4]
-        errors = run[8]
+        wpm = run['wpm']
+        errors = run['total_errors']
 
-        if errors < best_run[8]:
+        if errors < best_run['wpm']:
             best_run = run
-        elif errors == best_run[8]:
-            if wpm < best_run[4]:
+        elif errors == best_run['total_errors']:
+            if wpm < best_run['wpm']:
                 best_run = run
-
-    print('Best for today: {:.2f} wpm, {} errors'.format(best_run[4], best_run[8]))
+    print('Best for today: {:.2f} wpm, {} errors'.format(best_run['wpm'], best_run['total_errors']))
 
 
 def show_day_tests(args):

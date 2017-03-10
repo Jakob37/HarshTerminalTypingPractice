@@ -197,11 +197,12 @@ def get_today_test_eval_runs():
     c = conn.cursor()
     c.execute('SELECT * FROM type_entries WHERE date_stamp="{date_stamp}" AND type_stamp="TEST_EVAL" AND completed=1'
               .format(date_stamp=today_stamp))
-    tups = list()
-    for tup in c:
-        tups.append(tup)
+    entries = list()
+    for entry in c:
+        entry_string = '\t'.join([str(field) for field in entry])
+        entries.append(RunStatus.entry_dict_from_string(entry_string))
     conn.close()
-    return tups
+    return entries
 
 
 
