@@ -51,7 +51,7 @@ def is_date_in_range(target, start=None, end=None, debug=False):
 
 def get_start_of_week():
 
-    current_date_str = get_current_date()
+    current_date_str = get_current_date_string()
     current_date_obj = get_datestr_as_date(current_date_str)
     start = current_date_obj - datetime.timedelta(days=current_date_obj.weekday())
 
@@ -77,7 +77,7 @@ def get_start_of_year():
 
 def is_today_in_range(start, end):
 
-    today = get_current_date()
+    today = get_current_date_string()
     return is_date_in_range(today, start, end)
 
 

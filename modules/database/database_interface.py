@@ -189,14 +189,11 @@ def check_successful_test_today():
     return len(tups) > 0
 
 
-def get_today_test_eval_runs():
-
-    today_stamp = date_utils.get_current_date_string()
+def get_eval_runs():
 
     conn = get_connection()
     c = conn.cursor()
-    c.execute('SELECT * FROM type_entries WHERE date_stamp="{date_stamp}" AND type_stamp="TEST_EVAL" AND completed=1'
-              .format(date_stamp=today_stamp))
+    c.execute('SELECT * FROM type_entries WHERE type_stamp="TEST_EVAL" AND completed=1')
     entries = list()
     for entry in c:
         entry_string = '\t'.join([str(field) for field in entry])
