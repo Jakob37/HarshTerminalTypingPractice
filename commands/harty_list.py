@@ -46,6 +46,8 @@ def show_highscore(args):
         print('Best for {}:\t{:.2f} wpm\t{} errors\t{}'
               .format(args.highscore, best_run['wpm'], best_run['total_errors'], best_run['date_stamp'])
               .expandtabs(tabsize=6))
+    else:
+        print('Best for {}:\t{:.2f} wpm\t{} errors\t{}'.format(args.highscore, 0, 100, date_utils.get_current_date_string()))
 
 
 def show_day_tests(args):
