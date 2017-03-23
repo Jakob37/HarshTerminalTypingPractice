@@ -110,6 +110,7 @@ def parse_practice(subparsers_object):
     subparser.add_argument('practice_type', choices=['training', 'test'], default='training', nargs='?')
     subparser.add_argument('--auto_return', action='store_true')
     subparser.add_argument('--description', help='Extra information about the run', default='no description')
+    subparser.add_argument('--source', help='Text source for practice')
 
 
 def parse_test(subparsers_object):

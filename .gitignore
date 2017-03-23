@@ -8,3 +8,5 @@ parse_test/
 *.log
 __pycache__/
 *.sqlite
+
+orwell_animal_farm.txt

@@ -46,7 +46,11 @@ def run_practice(args=None):
         auto_return = args.auto_return
 
     description = args.description
-    book_path = get_book_path(REPUBLIC_BOOK)
+
+    if args.source is None:
+        book_path = get_book_path(REPUBLIC_BOOK)
+    else:
+        book_path = get_book_path(args.source + ".txt")
     book = Book(book_path, rand_start=True)
     practice_with_display.run_practice_with_display(auto_return=auto_return, book=book, descr=description)
 
