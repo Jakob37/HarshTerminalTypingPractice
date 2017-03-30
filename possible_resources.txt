@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0b78719ac6ccaa9f22ad1f3207eb3fc9f05934d88776a8b68fbe4d797f0c6035
-size 123
+http://stackoverflow.com/questions/13207678/whats-the-simplest-way-of-detecting-keyboard-input-in-python-from-the-terminal
