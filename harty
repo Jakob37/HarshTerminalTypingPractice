@@ -88,7 +88,6 @@ def parse_setup(subparsers_object):
 
     def harty_setup_func(args):
 
-        print("in setup")
         harty_setup.main(args)
 
     subparser = subparsers_object.add_parser('setup')

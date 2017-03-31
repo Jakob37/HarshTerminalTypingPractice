@@ -22,9 +22,6 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
                                                                             error_limit,
                                                                             book.get_book_name(),
                                                                             starting_line_nbr)
-
-    # log_util.write_to_log('New run started')
-
     window = initialize_curses_window()
     run_status = RunStatus(book, time_limit=time_limit, error_limit=error_limit, descr=descr, is_eval_run=is_eval_run)
 
@@ -54,7 +51,6 @@ def run_practice_with_display(book, auto_return=False, time_limit=None, error_li
             vis.visualize(window, write_center, x_margin, run_status, debug_string=STATUS_STRING)
 
             if run_status.limited_run():
-                # print('check limited')
                 run_status.check_limits()
 
     except KeyboardInterrupt:

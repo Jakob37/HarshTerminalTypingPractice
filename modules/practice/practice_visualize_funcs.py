@@ -1,7 +1,4 @@
-import time
 import curses
-
-from modules.utils import log_util
 
 
 def visualize(window, write_center, x_margin, run_status, debug_string=None, quiet=False):
@@ -9,8 +6,6 @@ def visualize(window, write_center, x_margin, run_status, debug_string=None, qui
     book = run_status.book
     correct = run_status.correct
     wrong = run_status.wrong
-    errors = run_status.errors
-    start_time = run_status.start_time
 
     sentence = book.current_line()
     preceeding = book.get_preceeding_lines(4)
