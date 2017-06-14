@@ -11,6 +11,7 @@ import harty_config
 from commands import harty_setup
 from commands import harty_status
 from commands import harty_list
+from commands import harty_bookread
 
 CONF_NAME = "harty.conf"
 sysdir = os.path.dirname(os.path.realpath(__file__))
@@ -53,6 +54,8 @@ def parse_arguments():
     parse_test(subparsers)
     parse_status(subparsers)
     parse_list(subparsers)
+    parse_addbook(subparsers)
+    parse_readbook(subparsers)
 
     args = parser.parse_args()
     args.func(args)
@@ -145,5 +148,28 @@ def parse_list(subparsers_object):
     subparser.add_argument('--highscore', choices=['day', 'week', 'month', 'year', 'all'])
 
 
+def parse_addbook(subparsers_object):
+
+    def harty_addbook_func(args):
+        verify_files_setup(args)
+        harty_bookread.add_book(args)
+
+    subparser = subparsers_object.add_parser('addbook')
+    subparser.set_defaults(func=harty_addbook_func, which='addbook')
+
+    subparser.add_argument('--book', help='Path to book', required=True)
+
+
+def parse_readbook(subparsers_object):
+
+    def harty_readbook_func(args):
+        verify_files_setup(args)
+        harty_bookread.read_book(args)
+
+    subparser = subparsers_object.add_parser('readbook')
+    subparser.set_defaults(func=harty_readbook_func, which='readbook')
+
+
 if __name__ == '__main__':
+
     parse_arguments()
