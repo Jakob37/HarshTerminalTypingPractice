@@ -1,4 +1,5 @@
 from modules.practice.book import Book
+from modules.database import book_db_interface
 
 
 class BookRead:
@@ -7,9 +8,10 @@ class BookRead:
     Represents read-through of book
     """
 
-    def __init__(self, book, line=0, spent_time=0, typos=list()):
+    def __init__(self, book, name, line=0, spent_time=0, typos=list()):
 
         self.book = book
+        self.name = name
         self.line = line
         self.spent_time = spent_time
         self.typos = typos
@@ -23,8 +25,8 @@ class BookRead:
     def load_from_db(self):
         pass
 
-    def write_to_db(self):
-        pass
+    def write_new_db_entry(self):
+        book_db_interface.add_new_book(self.name, self.book.book_fp)
 
 
 class Typo:
@@ -33,4 +35,3 @@ class Typo:
         self.character = character
         self.curr_wpm = curr_wpm
         self.curr_epm = curr_epm
-

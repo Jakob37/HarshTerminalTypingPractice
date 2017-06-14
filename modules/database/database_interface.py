@@ -19,9 +19,12 @@ ENTRY_FIELDS = [('entry_id', 'INTEGER PRIMARY KEY'),
                 ('type_stamp', 'TEXT'),
                 ('description', 'TEXT')]
 
+
+BOOK_TABLE = 'books'
+
 BOOK_FIELDS = [('entry_id', 'INTEGER PRIMARY KEY'),
-               ('data', 'TEXT'),
                ('name', 'TEXT'),
+               ('path', 'TEXT'),
                ('date_create', 'TEXT'),
                ('progress', 'INTEGER'),
                ('spent_time', 'NUMERIC')]
@@ -35,6 +38,9 @@ def setup_database(database_path, dry_run=False):
     c = conn.cursor()
 
     create_entry_table = get_create_table_command(ENTRY_TABLE, ENTRY_FIELDS)
+    c.execute(create_entry_table)
+
+    create_entry_table = get_create_table_command(BOOK_TABLE, BOOK_FIELDS)
     c.execute(create_entry_table)
 
     if not dry_run:
