@@ -19,6 +19,9 @@ def add_new_book(name, path):
 
     params = (name, path, current_date, progress, spent_time)
     command_str = 'INSERT INTO books VALUES (NULL, ?, ?, ?, ?, ?)'
+
+    print(params)
+
     cursor.execute(command_str, params)
     conn.commit()
     conn.close()

@@ -22,10 +22,11 @@ class BookRead:
         """Generate object from tab-delimited string"""
 
         fields = tab_string.split('\t')
-        name = fields[0]
-        path = fields[1]
-        progress = fields[2]
-        spent_time = fields[3]
+        name = fields[1]
+        path = fields[2]
+        progress = int(fields[4])
+        # spent_time = fields[4]
+        spent_time = 0
 
         new_obj = cls(name=name, path=path, line=progress, spent_time=spent_time)
         return new_obj

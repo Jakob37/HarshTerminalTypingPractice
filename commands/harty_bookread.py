@@ -1,10 +1,8 @@
 from modules.practice.book import Book
 from modules.book.book_read import BookRead
 
-from modules.practice import practice_with_display
+from modules.practice.practice_with_display import run_practice_with_display
 from modules.database import book_db_interface
-
-
 
 
 def read_book(args):
@@ -14,7 +12,14 @@ def read_book(args):
 
     target_read = book_db_interface.load_book(book_name)
 
+    print(target_read.name)
+    print(target_read.path)
+
+    book = Book(target_read.path, start_line=target_read.line)
+
     print(target_read)
+
+    run_practice_with_display(book=book)
 
 
 def add_book(args):
@@ -23,6 +28,6 @@ def add_book(args):
     book = Book(book_path)
 
     book_name = args.name
-    book_read = BookRead(book, book_name)
+    book_read = BookRead(book_name, book_path)
 
     book_db_interface.add_new_book(book_read.name, book_read.path)

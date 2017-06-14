@@ -44,6 +44,9 @@ class Book:
         return self.book_lines[curr:curr + nbr]
 
     def current_line(self):
+
+        print(self.curr_line_nbr)
+
         return self.book_lines[self.curr_line_nbr - 1]
 
     def get_next_line(self, update_line=True):
