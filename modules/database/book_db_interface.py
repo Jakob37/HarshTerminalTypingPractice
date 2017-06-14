@@ -5,6 +5,7 @@ from modules.utils import date_utils
 import harty_config
 
 from modules.database import database_interface as db_interface
+from modules.book.book_read import BookRead
 
 
 def add_new_book(name, path):
@@ -31,6 +32,24 @@ def update_progress(book, run_status):
     pass
 
 
-def load_progress(book):
-    pass
+def load_book(book_name):
+
+    conn = db_interface.get_connection()
+    c = conn.cursor()
+
+    c.execute('SELECT * FROM books WHERE name="{}"'.format(book_name))
+    hits = list()
+
+    for entry in c:
+        book_string = '\t'.join([str(field) for field in entry])
+        book_read = BookRead.book_read_from_string(book_string)
+        hits.append(book_read)
+    conn.close()
+
+    if len(hits) != 1:
+        raise ValueError('Wrong number of entries found ({}), only one is currently OK'.format(len(hits)))
+
+    target_read = hits[0]
+    return target_read
+
 

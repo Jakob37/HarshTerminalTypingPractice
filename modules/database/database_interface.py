@@ -213,9 +213,3 @@ def get_eval_runs():
         entries.append(RunStatus.entry_dict_from_string(entry_string))
     conn.close()
     return entries
-
-
-
-
-
-

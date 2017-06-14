@@ -3,6 +3,8 @@ import time
 
 class RunStatus:
 
+    """Represents status for an ongoing run"""
+
     def __init__(self, book, time_limit=None, error_limit=None, descr=None, is_eval_run=False):
 
         self.book = book
