@@ -31,3 +31,11 @@ def add_book(args):
     book_read = BookRead(book_name, book_path)
 
     book_db_interface.add_new_book(book_read.name, book_read.path)
+
+
+def list_books(args):
+    
+    book_reads = book_db_interface.get_books()
+    for book_read in book_reads:
+        print(book_read)
+

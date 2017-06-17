@@ -32,22 +32,35 @@ def reset_book():
 
 
 def update_progress(book, run_status):
-    pass
-
-
-def load_book(book_name):
 
     conn = db_interface.get_connection()
     c = conn.cursor()
 
-    c.execute('SELECT * FROM books WHERE name="{}"'.format(book_name))
-    hits = list()
 
+    conn.close()
+
+
+def get_books():
+
+    conn = db_interface.get_connection()
+    c = conn.cursor()
+
+    c.execute('SELECT * FROM books')
+    books = list()
+    
     for entry in c:
         book_string = '\t'.join([str(field) for field in entry])
         book_read = BookRead.book_read_from_string(book_string)
-        hits.append(book_read)
+        books.append(book_read)
     conn.close()
+
+    return books
+
+
+def load_book(book_name):
+
+    books = get_books()
+    hits = [book_read for book_read in books if book_read.name == book_name]
 
     if len(hits) != 1:
         raise ValueError('Wrong number of entries found ({}), only one is currently OK'.format(len(hits)))

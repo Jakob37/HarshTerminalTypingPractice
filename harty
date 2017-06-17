@@ -56,6 +56,7 @@ def parse_arguments():
     parse_list(subparsers)
     parse_addbook(subparsers)
     parse_readbook(subparsers)
+    parse_listbooks(subparsers)
 
     args = parser.parse_args()
     args.func(args)
@@ -171,6 +172,17 @@ def parse_readbook(subparsers_object):
     subparser.set_defaults(func=harty_readbook_func, which='readbook')
 
     subparser.add_argument('--name', help='Identifier for the book', required=True)
+
+
+def parse_listbooks(subparsers_object):
+
+    def harty_listbooks_func(args):
+        verify_files_setup(args)
+        harty_bookread.list_books(args)
+
+    subparser = subparsers_object.add_parser('listbooks')
+    subparser.set_defaults(func=harty_listbooks_func, which='listbooks')
+
 
 
 if __name__ == '__main__':
